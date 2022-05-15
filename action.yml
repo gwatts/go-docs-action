@@ -24,6 +24,7 @@ outputs:
 
 runs:
   using: "composite"
+  timeout-minutes: ${{ inputs.timeout-minutes }}
   steps:
     - name: 'Install godoc-static'
       shell: bash
@@ -36,7 +37,6 @@ runs:
     - name: 'Run go doc'
       id: run-godoc
       shell: bash
-      timeout-minutes: ${{ inputs.timeout-minutes }}
       run: |
         OUTDIR=$( mktemp -dp $RUNNER_TEMP )
         echo "::set-output name=output-path::$OUTDIR"
