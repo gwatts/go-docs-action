@@ -13,6 +13,10 @@ inputs:
     description: 'Go pkg path to generate docs for'
     required: false
     default: '.'
+  timeout-minutes:
+    description: 'Maximum number of minutes to wait for godoc-static to complete'
+    required: false
+    default: 10
 outputs:
   output-path:
     description: 'The directory containing the generated HTML output'
@@ -32,6 +36,7 @@ runs:
     - name: 'Run go doc'
       id: run-godoc
       shell: bash
+      timeout-minutes: ${{ inputs.timeout-minutes }}
       run: |
         OUTDIR=$( mktemp -dp $RUNNER_TEMP )
         echo "::set-output name=output-path::$OUTDIR"
