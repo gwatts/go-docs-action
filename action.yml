@@ -1,0 +1,48 @@
+name: 'Go Docs'
+description: 'Generate static HTML from go docs'
+inputs:
+  title:
+    description: 'Page title to display on every page'
+    required: false
+    default: ''
+  description:
+    description: 'Description to display on package index page'
+    required: false
+    default: ''
+  pkg-path:
+    description: 'Go pkg path to generate docs for'
+    required: false
+    default: '.'
+outputs:
+  output-path:
+    description: 'The directory containing the generated HTML output'
+    value: ${{ steps.run-godoc.outputs.output-path }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Install godoc-static'
+      shell: bash
+      run: |
+        echo "::group::Install Dependencies"
+        go install -v code.rocketnine.space/tslocum/godoc-static@v0.2.1
+        go install -v golang.org/x/tools/cmd/godoc@v0.1.10
+        echo "::endgroup::"
+
+    - name: 'Run go doc'
+      id: run-godoc
+      shell: bash
+      run: |
+        OUTDIR=$( mktemp -dp $RUNNER_TEMP )
+        echo "::set-output name=output-path::$OUTDIR"
+
+        echo "::group::Run godoc-static"
+        godoc-static \
+          -verbose \
+          -destination=$OUTDIR \
+          -link-index \
+          -disable-filter \
+          -site-name "${{ inputs.title }}" \
+          -site-description  "${{ inputs.description }}" \
+          ${{ inputs.pkg-path }}
+        echo "::endgroup::"
