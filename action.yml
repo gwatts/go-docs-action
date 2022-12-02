@@ -34,7 +34,7 @@ runs:
       shell: bash
       run: |
         OUTDIR=$( mktemp -dp $RUNNER_TEMP )
-        echo "::set-output name=output-path::$OUTDIR"
+        echo "output-path=$OUTDIR" >> $GITHUB_OUTPUT
 
         echo "::group::Run godoc-static"
         godoc-static \
