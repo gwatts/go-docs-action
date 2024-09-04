@@ -26,7 +26,7 @@ runs:
       run: |
         echo "::group::Install Dependencies"
         go install -v code.rocketnine.space/tslocum/godoc-static@v0.2.2
-        go install -v golang.org/x/tools/cmd/godoc@v0.18.0
+        go install -v golang.org/x/tools/cmd/godoc@v0.24.0
         echo "::endgroup::"
 
     - name: 'Run go doc'
